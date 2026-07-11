@@ -432,14 +432,14 @@ get_hashed_typeid (const idl_pstate_t *pstate, struct descriptor_type_meta *dtm,
   type_spec = idl_strip (type_spec, IDL_STRIP_FORWARD);
 
   struct type_meta *tm = find_type (dtm, type_spec);
-  if (!tm || !tm->finalized) {
-    if (tm && !tm->finalized && is_on_stack(dtm, tm->node)) {
-      ti->_d = kind;
-      memset (ti->_u.equivalence_hash, 0, sizeof (ti->_u.equivalence_hash));
-      return IDL_RETCODE_OK;
-    }
+  if (!tm) {
     idl_error (pstate, idl_location (type_spec), "Type id not found for type %s", idl_identifier (type_spec));
     return IDL_RETCODE_BAD_PARAMETER;
+  }
+  if (!tm->finalized && is_on_stack(dtm, tm->node)) {
+    ti->_d = kind;
+    memset (ti->_u.equivalence_hash, 0, sizeof (ti->_u.equivalence_hash));
+    return IDL_RETCODE_OK;
   }
   if ((ret = type_meta_add_dep (dtm->stack, tm)) < 0)
     return ret;
