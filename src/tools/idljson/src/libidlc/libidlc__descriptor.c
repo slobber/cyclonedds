@@ -1319,19 +1319,19 @@ emit_array(
   uint32_t dims = 1;
 
   if (idl_is_array(node)) {
-    dims = idl_array_size(node);
+    idl_array_size(node, &dims);
     type_spec = idl_strip(idl_type_spec(node), IDL_STRIP_FORWARD);
   } else {
     type_spec = idl_strip(idl_type_spec(node), IDL_STRIP_ALIASES|IDL_STRIP_FORWARD);
     assert(idl_is_array(type_spec));
-    dims = idl_array_size(type_spec);
+    idl_array_size(type_spec, &dims);
     type_spec = idl_type_spec(type_spec);
   }
 
   /* resolve aliases, squash multi-dimensional arrays */
   for (; idl_is_alias(type_spec); type_spec = idl_type_spec(type_spec))
     if (idl_is_array(type_spec))
-      dims *= idl_array_size(type_spec);
+      idl_multiply_by_array_size(type_spec, &dims);
 
   simple = (idl_mask(type_spec) & (IDL_BASE_TYPE|IDL_STRING|IDL_WSTRING|IDL_ENUM|IDL_BITMASK)) != 0;
 
