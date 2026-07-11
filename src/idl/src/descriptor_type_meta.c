@@ -1105,9 +1105,6 @@ add_typedef (
   struct descriptor_type_meta *dtm = (struct descriptor_type_meta *) user_data;
   const idl_type_spec_t *type_spec = idl_is_array (node) ? node : idl_type_spec (node);
 
-  if (!revisit && is_on_stack (dtm, node))
-      return IDL_RETCODE_OK | IDL_VISIT_DONT_RECURSE;
-
   // don't visit fully descriptive type-spec, but visit plain-collection type-spec
   bool visit_type_spec = idl_is_array (node) || !has_fully_descriptive_typeid_impl (type_spec, false, false);
 
@@ -1201,9 +1198,6 @@ emit_struct(
 
   (void) pstate;
   (void) path;
-  if (!revisit && is_on_stack (dtm, node))
-      return IDL_RETCODE_OK | IDL_VISIT_DONT_RECURSE;
-
   if (revisit) {
     assert (dtm->stack->to_minimal->_u.minimal._d == DDS_XTypes_TK_STRUCTURE);
     assert (dtm->stack->to_complete->_u.complete._d == DDS_XTypes_TK_STRUCTURE);
@@ -1246,9 +1240,6 @@ emit_union(
 
   (void) pstate;
   (void) path;
-  if (!revisit && is_on_stack (dtm, node))
-      return IDL_RETCODE_OK | IDL_VISIT_DONT_RECURSE;
-
   if (revisit) {
     assert (dtm->stack->to_minimal->_u.minimal._d == DDS_XTypes_TK_UNION);
     assert (dtm->stack->to_complete->_u.complete._d == DDS_XTypes_TK_UNION);
