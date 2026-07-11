@@ -16,6 +16,7 @@ add_subdirectory(_confgen)
 if(BUILD_IDLC)
   add_subdirectory(idlpp)
   add_subdirectory(idlc)
+  add_subdirectory(idljson)
 endif()
 
 if(HAVE_IDLC)
